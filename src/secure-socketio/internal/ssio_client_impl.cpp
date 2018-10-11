@@ -202,11 +202,18 @@ namespace ssio
         do{
             websocketpp::uri uo(uri);
             ostringstream ss;
+			if (uo.get_scheme().empty())
+			{
 #if SIO_TLS
-            ss<<"wss://";
+				ss << "wss://";
 #else
-            ss<<"ws://";
+				ss << "ws://";
 #endif
+			}
+			else
+			{
+				ss << uo.get_scheme() << "://";
+			}
             const std::string host(uo.get_host());
             // As per RFC2732, literal IPv6 address should be enclosed in "[" and "]".
             if(host.find(':')!=std::string::npos){
